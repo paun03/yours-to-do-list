@@ -7,6 +7,7 @@ let btnSendTask = document.querySelector("#sendTask");
 let btnRestartInput = document.querySelector("#restartInput");
 
 let taskContainerPending = document.querySelector(".taskContainerPending");
+let taskContainerFinished = document.querySelector(".taskContainerFinished");
 
 // FUNCTIONS
 
@@ -36,16 +37,12 @@ let sendTaskTo = () => {
     }
 };
 
-let removeTaskFrom = () => {
-    insertInput.value = "";
-};
-
 btnSendTask.addEventListener("click", () => {
     sendTaskTo();
 });
 
 btnRestartInput.addEventListener("click", () => {
-    removeTaskFrom();
+    insertInput.value = "";
 });
 
 taskContainerPending.addEventListener("click", (event) => {
@@ -57,4 +54,39 @@ taskContainerPending.addEventListener("click", (event) => {
             taskContainer.remove();
         }
     }
+});
+
+taskContainerPending.addEventListener("click", (event) => {
+    const clickedElement = event.target;
+
+    if (clickedElement.tagName === "BUTTON" && clickedElement.id === "finishTask") {
+        const taskContainer = clickedElement.closest(".taskContainer");
+        if (taskContainer) {
+            let finishedTaskContainer = document.createElement("div");
+            finishedTaskContainer.classList.add("taskContainer");
+            let finishedTask = document.createElement("div");
+            finishedTask.classList.add("task");
+            let parFinished = document.createElement("p");
+            parFinished.textContent = `${insertInput.value}`;
+            let btnRemoveFinishedTask = document.createElement("button");
+            btnRemoveFinishedTask.textContent = "✘";
+            btnRemoveFinishedTask.setAttribute("id", "removeFinishedTask");
+
+            finishedTask.appendChild(parFinished);
+            finishedTaskContainer.appendChild(finishedTask);
+            finishedTaskContainer.appendChild(btnRemoveFinishedTask);
+
+            taskContainerFinished.appendChild(finishedTaskContainer);
+        }
+    }
+});
+
+taskContainerFinished.addEventListener("click", (event) => {
+    const clickedElement = event.target;
+    if (clickedElement.tagName === "BUTTON" && clickedElement.id === "removeFinishedTask") {
+        const taskContainer = clickedElement.closest(".taskContainer");
+        if(taskContainer) {
+            taskContainer.remove();
+        }
+    } 
 });
